@@ -10,8 +10,36 @@ export default function LoginPage() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
+
+    const router = useRouter()
     // handler will go here
-    
+
+    const handleSubmit  = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setError('')
+        setLoading(true)
+        
+        try {
+            const response = await signIn('credentials', {
+                email,
+                password,
+                redirect: false,
+            })
+
+            if (response?.ok) {
+                router.push('/dashboard')
+            } else {
+                setError(response?.error || 'Invalid email or password')
+                setLoading(false)
+            }
+             
+        } catch (error) {
+            setError('Something went wrong. Please try again.')
+            setLoading(false)
+        }
+
+    }
+
 
     return (
         <div className='min-h-screen flex items-center justify-center bg-gray-50'>
@@ -24,7 +52,7 @@ export default function LoginPage() {
                     </div>
                 )}
                 
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className='mb-4'>
                         <label className='block text-sm font-medium text-gray-700'>
                             Email
