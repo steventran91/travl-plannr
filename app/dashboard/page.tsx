@@ -4,6 +4,8 @@ import { authOptions } from '../api/auth/[...nextauth]/route'
 import prisma from '@/lib/prisma'
 import Link from 'next/link'
 import LogoutButton from '@/components/LogoutButton'
+import TripCard from '@/components/TripCard'
+import TripList from '@/components/TripList'
 
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions)
@@ -51,21 +53,7 @@ export default async function DashboardPage() {
                             <p className="text-gray-400 text-sm mt-2">Create your first trip to get started!</p>
                         </div>
                     ) : (
-                        <div className="grid gap-4">
-                            {trips.map((trip) => (
-                                <div key={trip.id} className="bg-white rounded-lg shadow p-6">
-                                    <div className="flex justify-between items-center">
-                                        <div>
-                                            <h3 className="text-xl font-semibold">{trip.name}</h3>
-                                            <p className="text-gray-600">{trip.destination}</p>
-                                            <p className="text-sm text-gray-500">
-                                        {new Date(trip.startDate).toLocaleDateString()} - {new Date(trip.endDate).toLocaleDateString()}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                            </div>
+                        <TripList trips={trips}/>
                     )}
                 </div>
             </div>
